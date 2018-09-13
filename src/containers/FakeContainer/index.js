@@ -1,39 +1,60 @@
 import React, { Component } from 'react';
 import PropTypes, { shape, func, string } from 'prop-types';
 import { connect } from 'react-redux';
-import { addPokemon, isLoading } from '../../actions';
-import { cleanPokemon } from '../../helper.js'
+import { addPokemonTypes, isLoading, addPokemon } from '../../actions';
+import { cleanPokemon, getEachPokemon } from '../../helper.js'
 import Loading from '../../components/Loading'
 import CardContainer from '../../components/CardContainer';
 
 class FakeContainer extends Component {
+  constructor(){
+    super() 
+    this.state = {
+      clicked: false,
+      displayPokemon: []
+    }
+  }
 
   componentDidMount = () => {
     this.getPokemonTypes()
   }
 
-  getPokemonTypes = async () => {
+  getPokemonTypes = async() => {
     try {
-      this.props.isLoading(false)
       const url = 'http://localhost:3001/types'
+      this.props.isLoading(true)
       const response = await fetch(url)
       const data = await response.json()
       const pokemon = await cleanPokemon(data)
-      this.props.addPokemon(pokemon)
-      this.props.isLoading(true)
+      this.props.addPokemonTypes(pokemon)
+      this.props.isLoading(false)
     } catch(error) {
       throw new Error(error.message)
     }
   }
 
-  getPokemon = async (id) => {
-    try {
-      const url = `http://localhost:3001/pokemon/${id}`
-      const response = await fetch(url)
-      const data = await response.json()
-    } catch(error) {
-      throw new Error(error.message)
+  getPokemon = async (pokemon) => {
+    const pokeNames = this.props.pokemon.map((pokemon) => {
+      return pokemon.name
+    })
+    if(pokeNames.includes(pokemon.name)) {
+      return 
+    } else {
+    const eachPokemon = await getEachPokemon(pokemon)
+    this.props.addPokemon(eachPokemon)
+    this.filterPokemon(eachPokemon)
     }
+  }
+
+  filterPokemon = (pokemon) => {
+    const clicked = !this.state.clicked
+    const displayPokemon = pokemon
+    this.setState({ displayPokemon, clicked })
+  }
+
+  handleSwitch = () => {
+    const clicked = !this.state.clicked
+    this.setState({ clicked })
   }
 
   render() {
@@ -44,7 +65,13 @@ class FakeContainer extends Component {
       } else {
     return (
       <div>
-        <CardContainer pokemon={this.props.pokemon} getPokemon={this.getPokemon}/>
+        <CardContainer 
+        handleSwitch={this.handleSwitch} 
+        pokemonTypes={this.props.pokemonTypes} 
+        getPokemon={this.getPokemon} 
+        clicked={this.state.clicked} 
+        displayPokemon={this.state.displayPokemon}
+        />
       </div>
     );
   }
@@ -56,13 +83,15 @@ FakeContainer.propTypes = {
   fakeAction: func.isRequired
 };
 
-const mapStateToProps = (state) => ({
+export const mapStateToProps = (state) => ({
    isLoading: state.isLoading, 
+   pokemonTypes: state.pokemonTypes,
    pokemon: state.pokemon
   });
 
-const mapDispatchToProps = dispatch => ({ 
-  addPokemon: (pokemon) => dispatch(addPokemon(pokemon)),
-  isLoading: (bool) => dispatch(isLoading(bool))
+export const mapDispatchToProps = dispatch => ({ 
+  addPokemonTypes: (pokemon) => dispatch(addPokemonTypes(pokemon)),
+  isLoading: (bool) => dispatch(isLoading(bool)),
+  addPokemon: (ids) => dispatch(addPokemon(ids))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(FakeContainer);
