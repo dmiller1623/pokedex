@@ -3,6 +3,10 @@ import PropTypes, { shape, func, string } from 'prop-types';
 import { connect } from 'react-redux';
 import { fakeAction, addPokemon, isLoading } from '../../actions';
 import { cleanPokemon } from '../../helper.js'
+import Loading from '../../components/Loading'
+import Card from '../../components/CardContainer'
+import CardContainer from '../../components/CardContainer';
+
 class FakeContainer extends Component {
 
   componentDidMount = () => {
@@ -11,28 +15,34 @@ class FakeContainer extends Component {
 
   getPokemon = async () => {
     try {
-      this.props.isLoading(true)
+      this.props.isLoading(false)
       const url = 'http://localhost:3001/types'
       const response = await fetch(url)
       const data = await response.json()
       const pokemon = await cleanPokemon(data)
       this.props.addPokemon(pokemon)
-      this.props.isLoading(false)
+      this.props.isLoading(true)
     } catch(error) {
       throw new Error(error.message)
     }
   }
 
   render() {
-      
+      if(!this.props.isLoading) {
+        return(
+          <Loading/>
+        )
+      } else {
     return (
       <div>
-        <button onClick={()=> {
+        <CardContainer />
+        {/* <button onClick={()=> {
           this.props.fakeAction()
           alert('FAKE')
-        }}> FAKE </button>
+        }}> FAKE </button> */}
       </div>
     );
+  }
   }
 }
 
@@ -41,7 +51,9 @@ FakeContainer.propTypes = {
   fakeAction: func.isRequired
 };
 
-const mapStateToProps = ({ fake }) => ({ fake });
+const mapStateToProps = (state) => ({
+   isLoading: state.isLoading 
+  });
 
 const mapDispatchToProps = dispatch => ({ 
   addPokemon: (pokemon) => dispatch(addPokemon(pokemon)),
