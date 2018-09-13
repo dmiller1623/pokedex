@@ -6,3 +6,9 @@ export const cleanPokemon = (data) => {
   return pokemon
 }
 
+export const getEachPokemon = (pokemon) => {
+  const eachPoke = map(async (number) => {
+    const response = await fetch(number)
+  })
+}
+

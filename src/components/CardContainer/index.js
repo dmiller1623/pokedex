@@ -1,10 +1,17 @@
 import React from 'react'
 import Card from '../../components/Card'
 
-const CardContainer = () => {
+const CardContainer = ({ pokemon, getPokemon }) => {
+  const displayPokemon = pokemon.map((poke, index) => {
+    return <Card 
+    {...poke}
+    key={index}
+    getPokemon={getPokemon}
+    />
+  })
   return (
     <div>
-      <Card />
+      {displayPokemon}
     </div>
   )
 }

@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes, { shape, func, string } from 'prop-types';
 import { connect } from 'react-redux';
-import { fakeAction, addPokemon, isLoading } from '../../actions';
+import { addPokemon, isLoading } from '../../actions';
 import { cleanPokemon } from '../../helper.js'
 import Loading from '../../components/Loading'
-import Card from '../../components/CardContainer'
 import CardContainer from '../../components/CardContainer';
 
 class FakeContainer extends Component {
 
   componentDidMount = () => {
-    this.getPokemon()
+    this.getPokemonTypes()
   }
 
-  getPokemon = async () => {
+  getPokemonTypes = async () => {
     try {
       this.props.isLoading(false)
       const url = 'http://localhost:3001/types'
@@ -27,6 +26,16 @@ class FakeContainer extends Component {
     }
   }
 
+  getPokemon = async (id) => {
+    try {
+      const url = `http://localhost:3001/pokemon/${id}`
+      const response = await fetch(url)
+      const data = await response.json()
+    } catch(error) {
+      throw new Error(error.message)
+    }
+  }
+
   render() {
       if(!this.props.isLoading) {
         return(
@@ -35,11 +44,7 @@ class FakeContainer extends Component {
       } else {
     return (
       <div>
-        <CardContainer />
-        {/* <button onClick={()=> {
-          this.props.fakeAction()
-          alert('FAKE')
-        }}> FAKE </button> */}
+        <CardContainer pokemon={this.props.pokemon} getPokemon={this.getPokemon}/>
       </div>
     );
   }
@@ -52,7 +57,8 @@ FakeContainer.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-   isLoading: state.isLoading 
+   isLoading: state.isLoading, 
+   pokemon: state.pokemon
   });
 
 const mapDispatchToProps = dispatch => ({ 

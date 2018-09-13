@@ -1,9 +1,10 @@
 import React from 'react'
 
-const Card = () => {
+const Card = ({ id, name, pokemon, getPokemon }) => {
+
   return (
-    <div>
-      <h1>type</h1>
+    <div onClick={() => getPokemon() }>
+      <h1>{name}</h1>
     </div>
   )
 }
