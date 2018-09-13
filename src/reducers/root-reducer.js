@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux'
-import pokemonReducer from './pokemonReducer'
+import pokemonTypesReducer from './pokemonTypesReducer'
 import isLoadingReducer from './isLoadingReducer'
-import idsRedcuer from './idsReducer'
+import pokemonReducer from './pokemonReducer'
 
 const rootReducer = combineReducers({
-  pokemonTypes: pokemonReducer,
+  pokemonTypes: pokemonTypesReducer,
   isLoading: isLoadingReducer,
-  pokemon: idsRedcuer
+  pokemon: pokemonReducer
 })
 
 export default rootReducer

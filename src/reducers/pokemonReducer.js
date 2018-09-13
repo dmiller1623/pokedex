@@ -1,9 +1,9 @@
 const pokemonReducer = (state = [], action) => {
-  switch (action.type) {
-    case 'ADD_POKEMON_TYPES':
-      return action.pokemon
+  switch(action.type) {
+    case 'ADD_POKEMON':
+      return [...state, ...action.ids];
     default:
-      return state
+      return state;
   }
 }
 
