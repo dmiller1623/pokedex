@@ -1,4 +1,4 @@
-import { mapStateToProps, mapDispatchToProps, FakeContainer } from '../FakeContainer'
+import { mapStateToProps, mapDispatchToProps, PokemonContainer } from '../PokemonContainer'
 import * as actions from '../../actions'
 
 describe('mapStateToProps', () => {

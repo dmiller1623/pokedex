@@ -6,7 +6,7 @@ import { cleanPokemon, getEachPokemon } from '../../helper.js'
 import Loading from '../../components/Loading'
 import CardContainer from '../../components/CardContainer';
 
-class FakeContainer extends Component {
+class PokemonContainer extends Component {
   constructor(){
     super() 
     this.state = {
@@ -78,10 +78,6 @@ class FakeContainer extends Component {
   }
 }
 
-FakeContainer.propTypes = {
-  fake: shape({ fake: string }),
-  fakeAction: func.isRequired
-};
 
 export const mapStateToProps = (state) => ({
    isLoading: state.isLoading, 
@@ -94,4 +90,4 @@ export const mapDispatchToProps = dispatch => ({
   isLoading: (bool) => dispatch(isLoading(bool)),
   addPokemon: (ids) => dispatch(addPokemon(ids))
 });
-export default connect(mapStateToProps, mapDispatchToProps)(FakeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(PokemonContainer);

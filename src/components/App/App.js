@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import FakeContainer from '../../containers/FakeContainer/'
-// import CardContainer from '../../components/CardContainer';
+import PokemonContainer from '../../containers/FakeContainer/'
 
 class App extends Component {
 
@@ -11,10 +10,8 @@ class App extends Component {
       <div className='App'>
         <div>
          <h1 className='header'> POKéDEX </h1>
-        </div>
-        <div>
-          <FakeContainer />
-        </div>
+          <PokemonContainer />
+          </div>
       </div>
     );
   }
